@@ -1,0 +1,26 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+
+# Leitura dos dados
+df = pd.read_csv('p1000.csv')
+
+# Definição da função a ser ajustada
+def func(Q, a, b, c):
+    return a + b*Q + c*(Q**2)
+
+# Ajuste da curva usando a função curve_fit
+popt, pcov = curve_fit(func, df['Q'], df['H'])
+
+# Extração dos parâmetros a, b e c
+a, b, c = popt
+print("Parâmetros: a={:.6f}, b={:.6f}, c={:.6f}".format(a, b, c))
+
+# Plotagem dos dados e da curva ajustada
+plt.scatter(df['Q'], df['H'], label='Dados')
+plt.plot(df['Q'], func(df['Q'], a, b, c), 'r-', label='Curva ajustada')
+plt.xlabel('Q')
+plt.ylabel('H')
+plt.legend()
+plt.show()
