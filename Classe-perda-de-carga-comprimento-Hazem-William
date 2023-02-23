@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 
 
 
-
 class PerdaDeCarga:
     def __init__(self):
         self.data = pd.read_csv('perda_carga_comprimento.csv')
