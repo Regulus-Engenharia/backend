@@ -1,13 +1,37 @@
 import pandas as pd
+%matplotlib inline
+import matplotlib.pyplot as plt
+
+
+
 
 class PerdaDeCarga:
     def __init__(self):
         self.data = pd.read_csv('perda_carga_comprimento.csv')
-    
+
     def get_perda_de_carga(self, tipo_conexao, diametro, vazao, perda):
-        query = f"TipoConexao == '{tipo_conexao}' and Diametro == {diametro} and Vazao == {vazao}"
+        query = f"TipoConexao == '{tipo_conexao}' and Diametro == {diametro} and {perda} >= 0"
         result = self.data.query(query)
         if len(result) > 0:
-            return result[perda].iloc[0]
+            return result[vazao], result[perda]
         else:
             raise ValueError("Não foi encontrado nenhum resultado para os parâmetros informados.")
+
+    def plot_vazao_vs_perda(self, tipo_conexao, diametro, perda):
+        fig, ax = plt.subplots()
+        ax.set_xlabel('Vazão (m³/h)')
+        ax.set_ylabel('Perda de carga (mca/100m)')
+        ax.set_title(f'Perda de carga para {tipo_conexao} de diâmetro {diametro} e {perda}')
+        vazoes = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+        for vazao in vazoes:
+            try:
+                v, p = self.get_perda_de_carga(tipo_conexao, diametro, vazao, perda)
+                ax.plot(v, p, label=f'{vazao} m³/h')
+            except ValueError:
+                pass
+        ax.legend(title='Vazão')
+        
+        pdc = PerdaDeCarga()
+        pdc.plot_vazao_vs_perda('comprimento', 1, 'Perda')
+        plt.show()
+
