@@ -1,0 +1,13 @@
+import pandas as pd
+
+class PerdaDeCarga:
+    def __init__(self):
+        self.data = pd.read_csv('perda_carga_comprimento.csv')
+    
+    def get_perda_de_carga(self, tipo_conexao, diametro, vazao, perda):
+        query = f"TipoConexao == '{tipo_conexao}' and Diametro == {diametro} and Vazao == {vazao}"
+        result = self.data.query(query)
+        if len(result) > 0:
+            return result[perda].iloc[0]
+        else:
+            raise ValueError("Não foi encontrado nenhum resultado para os parâmetros informados.")
