@@ -24,3 +24,4 @@ plt.xlabel('Q')
 plt.ylabel('H')
 plt.legend()
 plt.show()
+
